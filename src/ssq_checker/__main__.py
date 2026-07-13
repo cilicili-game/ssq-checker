@@ -2,8 +2,10 @@
 from __future__ import annotations
 
 import argparse
+import fcntl
 import os
 import sys
+import tempfile
 
 from .bets import load_bets
 from .checker import (
@@ -39,6 +41,13 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--telegram", action="store_true",
                    help="Also send the report to Telegram. Reads TELEGRAM_BOT_TOKEN "
                         "and TELEGRAM_CHAT_ID from the environment.")
+    p.add_argument("--notify-new", action="store_true",
+                   help="Idempotent cron mode (with --telegram + --state-file): fetch "
+                        "once, send only if the latest draw's issue is newer than the "
+                        "one recorded in the state file, then record it atomically. "
+                        "Repeated runs send at most one message per new draw.")
+    p.add_argument("--state-file", default=None,
+                   help="Issue-receipt file for --notify-new (stores the last notified issue).")
     p.add_argument("--sync-history", action="store_true",
                    help="Record any not-yet-stored draws into the month-partitioned "
                         "history (for the Pages dashboard). Past records are frozen.")
@@ -54,6 +63,9 @@ def main(argv: list[str] | None = None) -> int:
     # red set, so refuse rather than silently ignore the flag.
     if args.blue is not None and args.reds is None:
         p.error("--blue requires --reds")
+
+    if args.notify_new and not (args.telegram and args.state_file):
+        p.error("--notify-new requires --telegram and --state-file")
 
     if args.sync_history:
         return _sync_history(args)
@@ -112,22 +124,129 @@ def main(argv: list[str] | None = None) -> int:
             "tier": result.tier, "amount": result.amount,
         }
 
-    if args.json:
-        import json as _json
-        print(_json.dumps(payload, ensure_ascii=False, indent=2))
-    else:
-        print(report)
-
-    if args.telegram:
-        token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
-        chat_id = os.environ.get("TELEGRAM_CHAT_ID", "")
+    # Idempotent cron mode: hold an exclusive lock across the whole
+    # read-receipt -> send -> write-receipt transaction so two concurrent
+    # --notify-new runs can't both decide the draw is new and double-send.
+    lock_fd = None
+    if args.notify_new:
         try:
-            send_telegram(report, token, chat_id)
-        except Exception as e:
-            print(f"❌ Telegram 投递失败：{e}", file=sys.stderr)
-            return 3
+            lock_fd = _acquire_notify_lock(args.state_file)
+        except OSError as e:
+            print(f"❌ 获取通知锁失败：{e}", file=sys.stderr)
+            return 5
+        if lock_fd is None:
+            # Another instance owns the transaction; it will handle this draw.
+            return 0
+    try:
+        # This single fetch is the one we act on. Skip entirely (no output, no
+        # send) unless this draw is strictly newer than what we recorded.
+        if args.notify_new:
+            try:
+                last = _read_state(args.state_file)
+            except OSError as e:
+                # A real read error (perms, I/O, path-is-dir) must NOT be read as
+                # "never notified" — that would resend. Abort before sending.
+                print(f"❌ 读取回执失败：{e}", file=sys.stderr)
+                return 5
+            if last is not None and _issue_num(draw.issue) <= _issue_num(last):
+                return 0
 
-    return 0
+        if args.json:
+            import json as _json
+            print(_json.dumps(payload, ensure_ascii=False, indent=2))
+        else:
+            print(report)
+
+        if args.telegram:
+            token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+            chat_id = os.environ.get("TELEGRAM_CHAT_ID", "")
+            try:
+                send_telegram(report, token, chat_id)
+            except Exception as e:
+                print(f"❌ Telegram 投递失败：{e}", file=sys.stderr)
+                return 3
+            # Record only after a confirmed send. If the receipt write fails, the
+            # message was still delivered, so we don't fail the run — the next run
+            # just resends (at-least-once, the safe direction for a reminder).
+            if args.notify_new:
+                try:
+                    _write_state_atomic(args.state_file, draw.issue)
+                except OSError as e:
+                    print(f"⚠️ 已推送但写回执失败（下次会重推）：{e}", file=sys.stderr)
+
+        return 0
+    finally:
+        if lock_fd is not None:
+            os.close(lock_fd)
+
+
+def _issue_num(issue: str | None) -> int:
+    """Issues are `YYYYNNN` (e.g. 2026079); compare numerically. Unparseable
+    state (corrupt/empty) sorts lowest so a real draw is always considered newer."""
+    try:
+        return int(issue)
+    except (TypeError, ValueError):
+        return -1
+
+
+def _acquire_notify_lock(state_file: str) -> int | None:
+    """Non-blocking exclusive lock on `<state-file>.lock`, guarding the whole
+    read -> send -> write transaction against concurrent --notify-new runs.
+    Returns an open fd (the caller must close it) or None if another instance
+    already holds it — in which case that instance owns this draw."""
+    d = os.path.dirname(state_file) or "."
+    os.makedirs(d, exist_ok=True)
+    fd = os.open(state_file + ".lock", os.O_CREAT | os.O_RDWR, 0o600)
+    try:
+        fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        # EAGAIN/EWOULDBLOCK: another instance holds it -> real contention.
+        os.close(fd)
+        return None
+    except OSError:
+        # Any other lock error (EINTR, ENOTSUP, I/O) is NOT contention: don't
+        # mask it as a silent skip, propagate so the run fails loudly.
+        os.close(fd)
+        raise
+    return fd
+
+
+def _read_state(path: str) -> str | None:
+    """Return the recorded issue, or None if no receipt exists yet. Only a
+    missing file counts as "never notified"; any other error (perms, I/O, a
+    directory in the way) propagates so the caller can abort before sending
+    rather than resend on a transient read failure."""
+    try:
+        with open(path, encoding="utf-8") as f:
+            return f.read().strip() or None
+    except FileNotFoundError:
+        return None
+
+
+def _write_state_atomic(path: str, issue: str) -> None:
+    """Write the receipt via a same-dir temp file + fsync + atomic rename, so an
+    interrupted/failed write can never leave a truncated receipt and a committed
+    receipt survives a crash."""
+    d = os.path.dirname(path) or "."
+    os.makedirs(d, exist_ok=True)
+    fd, tmp = tempfile.mkstemp(dir=d, prefix=".state-")
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
+            f.write(issue)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(tmp, path)
+        dfd = os.open(d, os.O_RDONLY)
+        try:
+            os.fsync(dfd)
+        finally:
+            os.close(dfd)
+    except OSError:
+        try:
+            os.unlink(tmp)
+        except OSError:
+            pass
+        raise
 
 
 def _sync_history(args) -> int:

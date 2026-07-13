@@ -9,3 +9,5 @@ dist/
 build/
 draw.txt
 .omc/
+.env
+logs/
