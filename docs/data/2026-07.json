@@ -1,0 +1,120 @@
+{
+  "month": "2026-07",
+  "draws": [
+    {
+      "issue": "2026075",
+      "date": "2026-07-02",
+      "bets": [
+        {
+          "reds": [
+            "01",
+            "02",
+            "03",
+            "04",
+            "08",
+            "09"
+          ],
+          "blue": "07",
+          "multiplier": 5
+        }
+      ],
+      "cost": 10,
+      "won": 0,
+      "net": -10,
+      "best_tier": null,
+      "pool_win": false
+    },
+    {
+      "issue": "2026076",
+      "date": "2026-07-05",
+      "bets": [
+        {
+          "reds": [
+            "01",
+            "02",
+            "03",
+            "04",
+            "08",
+            "09"
+          ],
+          "blue": "07",
+          "multiplier": 5
+        }
+      ],
+      "cost": 10,
+      "won": 25,
+      "net": 15,
+      "best_tier": "六等奖",
+      "pool_win": false
+    },
+    {
+      "issue": "2026077",
+      "date": "2026-07-07",
+      "bets": [
+        {
+          "reds": [
+            "01",
+            "02",
+            "03",
+            "04",
+            "08",
+            "09"
+          ],
+          "blue": "07",
+          "multiplier": 5
+        }
+      ],
+      "cost": 10,
+      "won": 0,
+      "net": -10,
+      "best_tier": null,
+      "pool_win": false
+    },
+    {
+      "issue": "2026078",
+      "date": "2026-07-09",
+      "bets": [
+        {
+          "reds": [
+            "01",
+            "02",
+            "03",
+            "04",
+            "08",
+            "09"
+          ],
+          "blue": "07",
+          "multiplier": 5
+        }
+      ],
+      "cost": 10,
+      "won": 0,
+      "net": -10,
+      "best_tier": null,
+      "pool_win": false
+    },
+    {
+      "issue": "2026079",
+      "date": "2026-07-12",
+      "bets": [
+        {
+          "reds": [
+            "01",
+            "02",
+            "03",
+            "04",
+            "08",
+            "09"
+          ],
+          "blue": "07",
+          "multiplier": 5
+        }
+      ],
+      "cost": 10,
+      "won": 0,
+      "net": -10,
+      "best_tier": null,
+      "pool_win": false
+    }
+  ]
+}
