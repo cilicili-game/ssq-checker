@@ -11,3 +11,4 @@ draw.txt
 .omc/
 .env
 logs/
+.tmp_codex/
