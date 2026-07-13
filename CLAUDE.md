@@ -37,7 +37,7 @@ Modules under `src/ssq_checker/`, one-way dependency flow `fetcher → checker �
 
 ### Pages dashboard
 
-`docs/index.html` is a zero-dependency static page (vanilla JS, inline SVG chart). It fetches `data/index.json`, then each `data/YYYY-MM.json`, concatenates records, computes cumulative net client-side, and renders headline net / totals / chart / per-draw table. It then fetches `data/stats.json` (optional — section skipped if absent) and renders the **号码分布统计** section: heatmap bar charts (color = hot/cold) + detail tables (出现次数/概率/当前遗漏/最大遗漏/平均遗漏) for reds 01–33 and blue 01–16. All feed-derived values are HTML-escaped or numeric-coerced before `innerHTML`. The workflow `.github/workflows/draw.yml` runs `--sync-history`, commits `docs/data` back (so months persist; `[skip ci]` avoids loops), and deploys `docs/` via GitHub Actions Pages. History sync + commit run only on schedule/`workflow_dispatch`, not on `push`.
+`docs/index.html` is a zero-dependency static page (vanilla JS, inline SVG chart). It fetches `data/index.json`, then each `data/YYYY-MM.json`, concatenates records, computes cumulative net client-side, and renders headline net / totals / chart / per-draw table. It then fetches `data/stats.json` (optional — section skipped if absent) and renders the **号码分布统计** section: heatmap bar charts (color = hot/cold) + detail tables (出现次数/概率/当前遗漏/最大遗漏/平均遗漏) for reds 01–33 and blue 01–16. All feed-derived values are HTML-escaped or numeric-coerced before `innerHTML`. **No GitHub CI** — `docs/data` is generated locally via `ssq-checker --sync-history`, committed, and pushed; Pages serves `master:/docs` directly (**Deploy from a branch**, not Actions). The old `.github/workflows/draw.yml` has been removed.
 
 ### Key invariants
 
@@ -55,4 +55,4 @@ Tests are network-free: `test_fetcher.py` feeds real sample lines to `parse_line
 
 ## Scheduling
 
-Runs on a schedule (draw days: Sun/Tue/Thu). Three supported paths: local cron, Hermes cron (`no_agent=True`, zero-token), and GitHub Actions (`.github/workflows/draw.yml`). GH Actions has 5–15 min schedule delay; local cron is preferred for precise delivery time.
+Runs on a schedule (draw days: Sun/Tue/Thu) via **local cron** on this host — `scripts/notify_local.sh` calls `ssq-checker --telegram --notify-new --state-file <f>` (idempotent, at-least-once; creds from repo-root `.env`). GitHub Actions delivery has been retired.

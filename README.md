@@ -1,6 +1,6 @@
 # ssq-checker
 
-[![营收看板](https://img.shields.io/badge/%E8%90%A5%E6%94%B6%E7%9C%8B%E6%9D%BF-Pages-2ea44f?style=flat-square&logo=github)](https://cyl-logan.github.io/ssq-checker/)
+[![营收看板](https://img.shields.io/badge/%E8%90%A5%E6%94%B6%E7%9C%8B%E6%9D%BF-Pages-2ea44f?style=flat-square&logo=github)](https://cilicili-game.github.io/ssq-checker/)
 
 中国福利彩票双色球（SSQ）结果查询 + 中奖比对工具。**纯 Python stdlib，零运行时依赖。**
 
@@ -125,35 +125,28 @@ cronjob(action='create', name='双色球',
 exec /home/logan/Projects/ssq-checker/venv/bin/ssq-checker
 ```
 
-### GitHub Actions（自动定时 + Telegram 投递）
+### 本机 cron 推送（当前采用）
 
-见 `.github/workflows/draw.yml`。工作流在开奖日（周日/二/四）自动跑测试 + 抓开奖 + 发 Telegram。
+GitHub Actions 播报已退役，改为在本机用 cron 跑 `scripts/notify_local.sh` 推 Telegram。
+幂等由 CLI 保证：`ssq-checker --telegram --notify-new --state-file <f>` 只拉取一次、期号比上次回执更新才推送，成功后原子写回执（详见脚本注释与 `CLAUDE.md`）。凭据放仓库根 `.env`（gitignore、chmod 600）。
 
-配置步骤：
-
-1. 找 [@BotFather](https://t.me/BotFather) 建一个 bot，拿到 token。
-2. 把 bot 拉进目标群/频道，拿到 chat_id（群是负数，如 `-1004407117408`）。
-3. 在 repo 的 **Settings → Secrets and variables → Actions** 加两个 secret：
-   - `TELEGRAM_BOT_TOKEN`
-   - `TELEGRAM_CHAT_ID`
-
-之后每次开奖都会自动播报（中没中都发）。也可在 Actions 页面手动 `workflow_dispatch` 触发测试。
-
-注意：GH Actions schedule 触发延迟 5-15 分钟，对于 22:00 的播报不算严重，但要追求精确投递时间还是用本地调度更稳。
+```cron
+*/15 21-23 * * 0,2,4 /path/to/ssq-checker/scripts/notify_local.sh >> /path/to/logs/cron_wrapper.log 2>&1
+```
 
 ## 营收看板（GitHub Pages）
 
-每期开奖后，CI 会把这一期的结果记进**按月分区的历史**（`docs/data/YYYY-MM.json`），commit 回仓库，再部署成一个 GitHub Pages 页面，显示累计盈亏（挣还是亏）、曲线图、每期明细。
+`--sync-history` 会把开奖结果记进**按月分区的历史**（`docs/data/YYYY-MM.json`），显示累计盈亏（挣还是亏）、曲线图、每期明细。数据在本机生成并 commit 进仓库，Pages 直接从 `master` 分支的 `/docs` 目录托管（**不跑任何 CI**）。
 
 关键设计：**每条记录按当时的号码和倍数冻结保存**。以后改 `bets.csv` 换号码，只影响之后的新期，过去的营收不会被重算。
 
 启用步骤：
 
-1. **Settings → Pages → Source** 选 **GitHub Actions**。
-2. 第一次去 **Actions → draw-check → Run workflow** 手动触发一次（`workflow_dispatch`），把自 2025-01-01 起的历史回填进 `docs/data/`（首次回填用当前 `bets.csv` 的号码作为近似）。
-3. 之后每个开奖日自动增量追加 + 重新部署。
+1. **Settings → Pages → Source** 选 **Deploy from a branch**，分支 `master`、目录 `/docs`。
+2. 本机跑一次 `ssq-checker --sync-history` 回填 `docs/data/`，commit 后推上去即可。
+3. 之后每次本机同步 + push 页面即更新。
 
-页面地址：`https://<用户名>.github.io/<仓库名>/`。
+页面地址：`https://cilicili-game.github.io/ssq-checker/`。
 
 手动同步历史（写到 `docs/data/`）：
 
