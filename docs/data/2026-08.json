@@ -230,6 +230,29 @@
       "net": -10,
       "best_tier": null,
       "pool_win": false
+    },
+    {
+      "issue": "2026098",
+      "date": "2026-08-25",
+      "bets": [
+        {
+          "reds": [
+            "01",
+            "02",
+            "03",
+            "04",
+            "08",
+            "09"
+          ],
+          "blue": "07",
+          "multiplier": 5
+        }
+      ],
+      "cost": 10,
+      "won": 25,
+      "net": 15,
+      "best_tier": "六等奖",
+      "pool_win": false
     }
   ]
 }
