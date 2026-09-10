@@ -1,355 +1,355 @@
 {
-  "generated_at": "2026-09-08T14:15:07+00:00",
-  "total_draws": 3501,
+  "generated_at": "2026-09-10T13:30:14+00:00",
+  "total_draws": 3502,
   "span": {
     "first_date": "2003-02-23",
-    "last_date": "2026-09-08",
+    "last_date": "2026-09-10",
     "first_issue": "2003001",
-    "last_issue": "2026104"
+    "last_issue": "2026105"
   },
   "reds": [
     {
       "num": "01",
       "count": 677,
-      "gap": 5,
+      "gap": 6,
       "max_gap": 26,
       "avg_gap": 4.2
     },
     {
       "num": "02",
-      "count": 659,
-      "gap": 13,
+      "count": 660,
+      "gap": 0,
       "max_gap": 26,
       "avg_gap": 4.3
     },
     {
       "num": "03",
       "count": 642,
-      "gap": 2,
+      "gap": 3,
       "max_gap": 32,
       "avg_gap": 4.4
     },
     {
       "num": "04",
-      "count": 625,
-      "gap": 1,
+      "count": 626,
+      "gap": 0,
       "max_gap": 47,
       "avg_gap": 4.6
     },
     {
       "num": "05",
       "count": 627,
-      "gap": 3,
+      "gap": 4,
       "max_gap": 43,
       "avg_gap": 4.6
     },
     {
       "num": "06",
       "count": 668,
-      "gap": 3,
+      "gap": 4,
       "max_gap": 28,
       "avg_gap": 4.2
     },
     {
       "num": "07",
       "count": 655,
-      "gap": 16,
+      "gap": 17,
       "max_gap": 24,
       "avg_gap": 4.3
     },
     {
       "num": "08",
       "count": 652,
-      "gap": 3,
+      "gap": 4,
       "max_gap": 34,
       "avg_gap": 4.4
     },
     {
       "num": "09",
       "count": 650,
-      "gap": 3,
+      "gap": 4,
       "max_gap": 28,
       "avg_gap": 4.4
     },
     {
       "num": "10",
       "count": 648,
-      "gap": 2,
+      "gap": 3,
       "max_gap": 40,
       "avg_gap": 4.4
     },
     {
       "num": "11",
       "count": 611,
-      "gap": 0,
+      "gap": 1,
       "max_gap": 30,
       "avg_gap": 4.7
     },
     {
       "num": "12",
       "count": 624,
-      "gap": 0,
+      "gap": 1,
       "max_gap": 30,
       "avg_gap": 4.6
     },
     {
       "num": "13",
-      "count": 638,
+      "count": 639,
       "gap": 0,
       "max_gap": 28,
       "avg_gap": 4.5
     },
     {
       "num": "14",
-      "count": 688,
-      "gap": 5,
+      "count": 689,
+      "gap": 0,
       "max_gap": 33,
       "avg_gap": 4.1
     },
     {
       "num": "15",
-      "count": 614,
-      "gap": 10,
+      "count": 615,
+      "gap": 0,
       "max_gap": 32,
       "avg_gap": 4.7
     },
     {
       "num": "16",
       "count": 617,
-      "gap": 2,
+      "gap": 3,
       "max_gap": 34,
       "avg_gap": 4.7
     },
     {
       "num": "17",
       "count": 669,
-      "gap": 10,
+      "gap": 11,
       "max_gap": 29,
       "avg_gap": 4.2
     },
     {
       "num": "18",
       "count": 666,
-      "gap": 5,
+      "gap": 6,
       "max_gap": 33,
       "avg_gap": 4.3
     },
     {
       "num": "19",
       "count": 641,
-      "gap": 0,
+      "gap": 1,
       "max_gap": 27,
       "avg_gap": 4.5
     },
     {
       "num": "20",
       "count": 653,
-      "gap": 0,
+      "gap": 1,
       "max_gap": 42,
       "avg_gap": 4.4
     },
     {
       "num": "21",
       "count": 592,
-      "gap": 9,
+      "gap": 10,
       "max_gap": 33,
       "avg_gap": 4.9
     },
     {
       "num": "22",
       "count": 678,
-      "gap": 4,
+      "gap": 5,
       "max_gap": 42,
       "avg_gap": 4.2
     },
     {
       "num": "23",
       "count": 600,
-      "gap": 14,
+      "gap": 15,
       "max_gap": 30,
       "avg_gap": 4.8
     },
     {
       "num": "24",
       "count": 612,
-      "gap": 3,
+      "gap": 4,
       "max_gap": 25,
       "avg_gap": 4.7
     },
     {
       "num": "25",
       "count": 624,
-      "gap": 2,
+      "gap": 3,
       "max_gap": 40,
       "avg_gap": 4.6
     },
     {
       "num": "26",
       "count": 676,
-      "gap": 6,
+      "gap": 7,
       "max_gap": 34,
       "avg_gap": 4.2
     },
     {
       "num": "27",
       "count": 650,
-      "gap": 1,
+      "gap": 2,
       "max_gap": 26,
       "avg_gap": 4.4
     },
     {
       "num": "28",
       "count": 582,
-      "gap": 1,
+      "gap": 2,
       "max_gap": 34,
       "avg_gap": 5.0
     },
     {
       "num": "29",
       "count": 594,
-      "gap": 7,
+      "gap": 8,
       "max_gap": 42,
       "avg_gap": 4.9
     },
     {
       "num": "30",
-      "count": 636,
-      "gap": 1,
+      "count": 637,
+      "gap": 0,
       "max_gap": 32,
       "avg_gap": 4.5
     },
     {
       "num": "31",
       "count": 601,
-      "gap": 0,
+      "gap": 1,
       "max_gap": 31,
       "avg_gap": 4.8
     },
     {
       "num": "32",
       "count": 659,
-      "gap": 18,
+      "gap": 19,
       "max_gap": 29,
       "avg_gap": 4.3
     },
     {
       "num": "33",
       "count": 578,
-      "gap": 9,
+      "gap": 10,
       "max_gap": 36,
-      "avg_gap": 5.0
+      "avg_gap": 5.1
     }
   ],
   "blue": [
     {
       "num": "01",
       "count": 239,
-      "gap": 10,
+      "gap": 11,
       "max_gap": 86,
       "avg_gap": 13.6
     },
     {
       "num": "02",
       "count": 209,
-      "gap": 5,
+      "gap": 6,
       "max_gap": 112,
       "avg_gap": 15.7
     },
     {
       "num": "03",
       "count": 218,
-      "gap": 0,
+      "gap": 1,
       "max_gap": 86,
       "avg_gap": 15.0
     },
     {
       "num": "04",
       "count": 216,
-      "gap": 4,
+      "gap": 5,
       "max_gap": 112,
       "avg_gap": 15.1
     },
     {
       "num": "05",
       "count": 217,
-      "gap": 13,
+      "gap": 14,
       "max_gap": 104,
       "avg_gap": 15.1
     },
     {
       "num": "06",
       "count": 218,
-      "gap": 26,
+      "gap": 27,
       "max_gap": 90,
       "avg_gap": 15.0
     },
     {
       "num": "07",
       "count": 219,
-      "gap": 6,
+      "gap": 7,
       "max_gap": 90,
       "avg_gap": 14.9
     },
     {
       "num": "08",
-      "count": 203,
-      "gap": 31,
+      "count": 204,
+      "gap": 0,
       "max_gap": 94,
-      "avg_gap": 16.2
+      "avg_gap": 16.1
     },
     {
       "num": "09",
       "count": 215,
-      "gap": 2,
+      "gap": 3,
       "max_gap": 94,
       "avg_gap": 15.2
     },
     {
       "num": "10",
       "count": 204,
-      "gap": 53,
+      "gap": 54,
       "max_gap": 60,
       "avg_gap": 16.1
     },
     {
       "num": "11",
       "count": 224,
-      "gap": 12,
+      "gap": 13,
       "max_gap": 107,
       "avg_gap": 14.6
     },
     {
       "num": "12",
       "count": 225,
-      "gap": 3,
+      "gap": 4,
       "max_gap": 92,
       "avg_gap": 14.5
     },
     {
       "num": "13",
       "count": 204,
-      "gap": 37,
+      "gap": 38,
       "max_gap": 84,
       "avg_gap": 16.1
     },
     {
       "num": "14",
       "count": 216,
-      "gap": 80,
+      "gap": 81,
       "max_gap": 94,
       "avg_gap": 15.1
     },
     {
       "num": "15",
       "count": 237,
-      "gap": 1,
+      "gap": 2,
       "max_gap": 83,
       "avg_gap": 13.7
     },
     {
       "num": "16",
       "count": 237,
-      "gap": 9,
+      "gap": 10,
       "max_gap": 68,
       "avg_gap": 13.7
     }
