@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-05T14:00:09+00:00",
+  "generated_at": "2026-11-08T13:30:08+00:00",
   "start_date": "2025-01-01",
   "months": [
     "2025-01",
@@ -27,10 +27,10 @@
     "2026-11"
   ],
   "summary": {
-    "draws": 278,
-    "total_cost": 2780,
+    "draws": 279,
+    "total_cost": 2790,
     "total_won": 550,
-    "net": -2230,
+    "net": -2240,
     "pool_wins": 0
   },
   "current_bets": [
@@ -48,8 +48,8 @@
     }
   ],
   "latest": {
-    "issue": "2026127",
-    "date": "2026-11-05",
+    "issue": "2026128",
+    "date": "2026-11-08",
     "bets": [
       {
         "reds": [
